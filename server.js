@@ -20,15 +20,33 @@ server.get('/', (req, res) => {
     `);
   });
   
-// ! GET request to /api/posts
+// ! s10 GET request to /api/posts
 server.get('/api/posts', (req, res) => {
     blogDB.find()
     .then(posts => {
         res.status(200).json(posts);
     })
     .catch(err => {
-        res.status(500).json({error: "The posts information could not be retrieved."})
+        res.status(500).json({error: "The posts information could not be retrieved.", err})
     })
+})
+
+
+// ! s11 GET request to /api/posts/:id
+server.get('/api/posts/:id', (req, res) => {
+    const id = req.params.id
+
+    blogDB.findById(id)
+        .then(post => {
+            if(post){
+                res.status(200).json({success: true, post})
+            } else {
+                res.status(404).json({success: false, message: `The post with the specified ID ${id} does not exist.`})
+            }
+        })
+        .catch(err => {
+            res.status(500).json({err: `The user information could not be retrieved.`, err})
+        })
 })
 
 
