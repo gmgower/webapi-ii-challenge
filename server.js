@@ -49,6 +49,23 @@ server.get('/api/posts/:id', (req, res) => {
         })
 })
 
+// ! s12 GET request to /api/posts/:id/comments
+server.get('/api/posts/:id/comments', async (req, res) => {
+    try {
+        const comments = await blogDB.findCommentById(req.params.id);
+
+        if(comments.length > 0) {
+            res.status(200).json(comments)
+        } else {
+            res.status(404).json({message: `The post with the specified ID ${id} does not exist.`});
+        }
+    } catch(error) {
+        res.status(500).json({
+            error: "The comments information could not be retrieved."
+        })
+    }
+    
+})
 
 
 // ? s6
