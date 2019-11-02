@@ -72,6 +72,21 @@ server.post('/api/posts/:id/comments',  (req, res) => {
 
 
 // ! s15 DELETE request to /api/posts/:id
+server.delete('/api/posts/:id', (req, res) => {
+    const {id} = req.params;
+
+    blogDB.remove(id)
+        .then(deletePost => {
+            if(deletePost) {
+                res.status(204).end()
+            } else {
+                res.status(404).json({message: `The post with the specified ID ${id} does not exist.` })
+            }
+        })
+        .catch(err => {
+            res.status(500).json({error: "The post could not be removed", err})
+        })
+})
 
 // ! s10 GET request to /api/posts
 server.get('/api/posts', (req, res) => {
